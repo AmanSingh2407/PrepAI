@@ -1,19 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-
-// Future pages (we'll build next)
-const Interview = () => <h1 className="p-10">Interview Page</h1>;
-const Login = () => <h1 className="p-10">Login Page</h1>;
+import Copyright from "./pages/Copyright";
+import Cookies from "./pages/Cookies";
+import TermsOfService from "./pages/Terms";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/interview" element={<Interview />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/copyright" element={<Copyright />} />
+      <Route path="/cookies" element={<Cookies />} />
+      <Route path="/terms" element={<TermsOfService />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+    </Routes>
   );
 }
 
