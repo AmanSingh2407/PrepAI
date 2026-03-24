@@ -4,6 +4,11 @@ import Copyright from "./pages/Copyright";
 import Cookies from "./pages/Cookies";
 import TermsOfService from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Learning from "./pages/Learning";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile"; 
+
+
 
 function App() {
   return (
@@ -13,6 +18,9 @@ function App() {
       <Route path="/cookies" element={<Cookies />} />
       <Route path="/terms" element={<TermsOfService />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/learning" element={<Learning />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/edit-profile" element={<EditProfile />} />
     </Routes>
   );
 }
