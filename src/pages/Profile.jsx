@@ -1,16 +1,12 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ProfileSidebar from "../components/ProfileSidebar";
 
 const Profile = () => {
   const [showFooter, setShowFooter] = useState(false);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Footer logic (same as dashboard)
   const handleMouseMove = (e) => {
     if (window.innerHeight - e.clientY < 80) {
       setShowFooter(true);
@@ -26,15 +22,6 @@ const Profile = () => {
     }
   };
 
-  const menu = [
-    { name: "Dashboard", path: "/" },
-    { name: "Edit Profile", path: "/edit-profile" }, // ✅ clickable
-    { name: "Analytics", path: "/analytics" },
-    { name: "Community", path: "/community" },
-    { name: "Password", path: "/password" },
-    { name: "Log Out", path: "/logout" },
-  ];
-
   return (
     <div
       className="h-screen flex bg-[#0b1220] overflow-hidden"
@@ -43,7 +30,6 @@ const Profile = () => {
       <Sidebar />
 
       <div className="flex-1 flex flex-col relative">
-
         {/* Navbar */}
         <div className="h-16">
           <Navbar />
@@ -54,37 +40,12 @@ const Profile = () => {
           className="flex-1 overflow-y-auto p-6 space-y-6"
           onScroll={handleScroll}
         >
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-
-            {/* LEFT PANEL */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-
-              <h2 className="text-white font-semibold text-lg mb-5">
-                My Profile
-              </h2>
-
-              <div className="space-y-2 text-sm">
-                {menu.map((item, i) => (
-                  <div
-                    key={i}
-                    onClick={() => navigate(item.path)}
-                    className={`px-4 py-2 rounded-lg cursor-pointer transition
-                      ${
-                        location.pathname === item.path
-                          ? "bg-white/10 text-white"
-                          : item.name === "Log Out"
-                          ? "text-red-400 hover:bg-red-500/20"
-                          : "text-gray-400 hover:bg-white/10 hover:text-white"
-                      }
-                    `}
-                  >
-                    {item.name}
-                  </div>
-                ))}
-              </div>
-
-            </div>
+            {/* ✅ STICKY LEFT PANEL */}
+            <div className="sticky top-6 self-start h-full">
+  <ProfileSidebar />
+</div>
 
             {/* RIGHT CONTENT */}
             <div className="lg:col-span-3 space-y-6">
@@ -117,10 +78,8 @@ const Profile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-300">
                   <p><span className="text-gray-400">Full Name:</span> Aman Singh</p>
                   <p><span className="text-gray-400">DOB:</span> 01/01/2003</p>
-
                   <p><span className="text-gray-400">Email:</span> aman@mail.com</p>
                   <p><span className="text-gray-400">Address:</span> Jhansi, Uttar Pradesh</p>
-
                   <p><span className="text-gray-400">Phone:</span> 2642626542</p>
                   <p><span className="text-gray-400">Department:</span> Computer Science</p>
                 </div>
@@ -152,17 +111,15 @@ const Profile = () => {
               </div>
 
             </div>
-
           </div>
         </div>
 
-        {/* FLOATING FOOTER */}
+        {/* FOOTER */}
         {showFooter && (
           <div className="fixed bottom-0 left-16 right-0 z-50 animate-slideUp">
             <Footer />
           </div>
         )}
-
       </div>
     </div>
   );

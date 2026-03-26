@@ -9,7 +9,7 @@ import SignupPage from "./SignupPage";
 import AISection from "./AISection";
 import AIChat from "./AIChat";
 import MockInterview from "./MockInterview";
-import Analytics from "./Analytics";
+import Analytics from "./MyAnalytics";
 
 const Dashboard = () => {
   const [showFooter, setShowFooter] = useState(false);

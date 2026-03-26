@@ -24,7 +24,7 @@ const Learning = () => {
   return (
     <div className="h-screen flex bg-[#0b1220] overflow-hidden">
       
-      <Sidebar />
+      
 
       <div className="flex-1 flex flex-col">
 
@@ -310,7 +310,7 @@ const Learning = () => {
 
         </div>
 
-        <Footer />
+      
 
       </div>
     </div>

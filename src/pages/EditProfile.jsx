@@ -1,76 +1,61 @@
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useNavigate, useLocation } from "react-router-dom";
+import ProfileSidebar from "../components/ProfileSidebar"; // ✅ NEW
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [showFooter, setShowFooter] = useState(false);
 
-  // ✅ Handle Save
   const handleSave = () => {
-    console.log("Profile Saved ✅");
     navigate("/profile");
   };
 
-  // ✅ Sidebar Menu
-  const menu = [
-    { name: "Dashboard", path: "/profile" },
-    { name: "Edit Profile", path: "/edit-profile" },
-    { name: "Analytics", path: "/analytics" },
-    { name: "Community", path: "/community" },
-    { name: "Password", path: "/password" },
-    { name: "Log Out", path: "/logout" },
-  ];
+  // SAME AS DASHBOARD
+  const handleMouseMove = (e) => {
+    if (window.innerHeight - e.clientY < 80) {
+      setShowFooter(true);
+    } else {
+      setShowFooter(false);
+    }
+  };
+
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+      setShowFooter(true);
+    }
+  };
 
   return (
-    <div className="h-screen flex bg-[#0b1220] overflow-hidden">
-      
-      {/* MAIN SIDEBAR */}
+    <div
+      className="h-screen flex bg-[#0b1220] overflow-hidden"
+      onMouseMove={handleMouseMove}
+    >
+
       <Sidebar />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative">
 
         {/* NAVBAR */}
         <div className="h-16">
           <Navbar />
         </div>
 
-        {/* PAGE CONTENT */}
-        <div className="flex-1 overflow-y-auto p-6">
+        {/* MAIN */}
+        <div
+          className="flex-1 overflow-y-auto p-6 space-y-6"
+          onScroll={handleScroll}
+        >
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
 
-            {/* ✅ LEFT PANEL (STICKY + CLICKABLE) */}
-            <div className="sticky top-6 h-fit bg-white/5 border border-white/10 rounded-2xl p-5">
+            {/* ✅ REUSABLE LEFT PANEL */}
+            <ProfileSidebar />
 
-              <h2 className="text-white font-semibold text-lg mb-6">
-                My Profile
-              </h2>
-
-              <div className="space-y-2 text-sm">
-                {menu.map((item) => (
-                  <div
-                    key={item.name}
-                    onClick={() => navigate(item.path)}
-                    className={`px-4 py-2 rounded-lg cursor-pointer transition
-                      ${
-                        location.pathname === item.path
-                          ? "bg-white/10 text-white"
-                          : item.name === "Log Out"
-                          ? "text-red-400 hover:bg-red-500/20"
-                          : "text-gray-400 hover:bg-white/10 hover:text-white"
-                      }
-                    `}
-                  >
-                    {item.name}
-                  </div>
-                ))}
-              </div>
-
-            </div>
-
-            {/* ✅ RIGHT SECTION */}
+            {/* RIGHT SECTION */}
             <div className="lg:col-span-3 bg-white/5 border border-white/10 rounded-2xl flex">
 
               {/* IMAGE SECTION */}
@@ -90,7 +75,7 @@ const EditProfile = () => {
 
               </div>
 
-              {/* FORM */}
+              {/* FORM (UNCHANGED) */}
               <div className="flex-1 p-6 overflow-y-auto max-h-[80vh] space-y-4">
 
                 <div className="grid grid-cols-2 gap-4">
@@ -194,7 +179,7 @@ const EditProfile = () => {
                   <input className="input w-full" />
                 </div>
 
-                {/* ✅ SAVE BUTTON WITH NAVIGATION */}
+                {/* SAVE */}
                 <div className="flex justify-end pt-4">
                   <button
                     onClick={handleSave}
@@ -212,8 +197,12 @@ const EditProfile = () => {
 
         </div>
 
-        {/* FOOTER */}
-        <Footer />
+        {/* FLOATING FOOTER */}
+        {showFooter && (
+          <div className="fixed bottom-0 left-16 right-0 z-40 animate-slideUp">
+            <Footer />
+          </div>
+        )}
 
       </div>
     </div>
