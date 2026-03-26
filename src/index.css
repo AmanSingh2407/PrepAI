@@ -43,41 +43,7 @@ body {
   box-shadow: 0 0 25px rgba(59, 130, 246, 0.35);
 }
 
-/* ===== SCROLLBAR (MODERN DARK) ===== */
-
-/* Chrome, Edge, Safari */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0b1220;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    to bottom,
-    #1e293b,
-    #334155
-  );
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    to bottom,
-    #334155,
-    #475569
-  );
-}
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #1e293b #0b1220;
-}
-
-<<<<<<< HEAD
+/* ===== INPUT ===== */
 .input {
   @apply bg-white/10 border border-white/20 text-white px-3 py-2 rounded-md outline-none;
 }
@@ -88,40 +54,54 @@ body {
 
 .chip {
   @apply px-3 py-1 rounded-full bg-white/10 text-gray-300 text-xs hover:bg-blue-500/20 hover:text-white;
-=======
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b1220;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #1e293b, #334155);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #334155, #475569);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b #0b1220;
+}
+
 /* ===== ANIMATIONS ===== */
 
 /* Fade */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.4s ease-in-out;
 }
 
 /* Scale */
 @keyframes scaleIn {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .animate-scaleIn {
-  animation: scaleIn 0.25s ease-out;
+  animation: scaleIn 0.3s ease;
 }
 
-/* Slide Up (Footer) */
+/* Slide Up */
 @keyframes slideUp {
   from {
     transform: translateY(100%);
@@ -137,33 +117,7 @@ body {
   animation: slideUp 0.3s ease-out;
 }
 
-/* ===== OVERLAY (LOGIN BLUR BG) ===== */
-.overlay-dark {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-}
-
-/* ===== INPUT FOCUS ===== */
-.input-focus {
-  transition: all 0.2s ease;
-}
-
-.input-focus:focus-within {
-  border-color: rgba(59, 130, 246, 0.6);
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
-}
-
-/* ===== TEXT ===== */
-.text-muted {
-  color: var(--text-secondary);
-}
-
-/* ===== CARD HOVER ===== */
-.card-dark:hover {
-  transform: translateY(-2px);
-  transition: 0.3s;
-}
-/* 🌈 Animated Gradient */
+/* ===== GRADIENT BACKGROUND ===== */
 .gradient-bg {
   position: absolute;
   inset: 0;
@@ -179,21 +133,6 @@ body {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-/* Fade */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.4s ease-in-out;
-}
-
-/* Scale */
-@keyframes scaleIn {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-.animate-scaleIn {
-  animation: scaleIn 0.3s ease;
->>>>>>> 61bdabff037e447419fa55d88594d1375552bc8c
+body {
+  overflow-x: hidden;
 }

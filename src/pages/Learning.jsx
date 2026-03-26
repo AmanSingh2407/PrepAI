@@ -1,157 +1,150 @@
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Hero from "../components/Hero";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import {
   LineChart,
   Line,
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer,
+  ResponsiveContainer
 } from "recharts";
-
 const data = [
   { day: "Mon", score: 60 },
-  { day: "Tue", score: 75 },
-  { day: "Wed", score: 70 },
-  { day: "Thu", score: 80 },
+  { day: "Tue", score: 80 },
+  { day: "Wed", score: 75 },
+  { day: "Thu", score: 85 },
   { day: "Fri", score: 90 },
 ];
 
 const Learning = () => {
   return (
-    <div className="h-screen flex bg-[#0b1220] overflow-hidden">
-      
-      <Sidebar />
+    <div className="space-y-5">
 
-      <div className="flex-1 flex flex-col">
+      {/* 🔥 TOP CARD */}
+      <div className="card-dark px-6 py-6 min-h-[220px] flex flex-col lg:flex-row justify-between items-center">
 
-        {/* Navbar */}
-        <div className="h-16">
-          <Navbar />
+        <div>
+          <h1 className="text-2xl font-semibold text-white">
+            Welcome Back, Aman!
+          </h1>
+
+          <p className="text-gray-400 text-sm mt-1">
+            Let’s conquer your interview today.
+          </p>
+
+          <div className="flex gap-3 mt-5">
+            <button className="btn-primary text-sm px-4 py-2">
+              Community Hub
+            </button>
+
+            <button className="btn-primary text-sm px-4 py-2 opacity-90">
+              Start a Mock Test
+            </button>
+          </div>
         </div>
 
-        {/* MAIN */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex gap-10 text-sm text-gray-300 mt-6 lg:mt-0 text-center">
+          <div>
+            <p className="text-white font-semibold">12</p>
+            <p className="text-xs text-gray-400">Total Learning</p>
+          </div>
+          <div>
+            <p className="text-white font-semibold">87%</p>
+            <p className="text-xs text-gray-400">Study Time</p>
+          </div>
+          <div>
+            <p className="text-white font-semibold">155h</p>
+            <p className="text-xs text-gray-400">Total Study Time</p>
+          </div>
+          <div>
+            <p className="text-white font-semibold">85/100</p>
+            <p className="text-xs text-gray-400">Test Score</p>
+          </div>
+        </div>
 
-          {/* HERO */}
-          <Hero />
+      </div>
 
-          {/* GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* 📚 MAIN SECTION */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-            {/* LEFT - LEARNING (SCROLLABLE) */}
-            <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col">
+        {/* LEFT */}
+        <div className="lg:col-span-2 card-dark p-5">
 
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-white font-semibold text-lg">
-                  My Learning
-                </h2>
-                <ChevronRight className="text-gray-400 cursor-pointer" />
-              </div>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-white font-semibold">My Learning</h2>
+            <ChevronRight className="text-gray-400 cursor-pointer" />
+          </div>
 
-              <div className="overflow-y-auto max-h-[320px] pr-2">
-                <div className="grid md:grid-cols-3 gap-6">
+          <div className="h-[260px] overflow-y-auto pr-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 
-                  {/* Java */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <div className="bg-yellow-100 rounded-lg p-6 flex justify-center mb-4">
-                      <span className="text-red-500 font-bold text-2xl">Java</span>
-                    </div>
-                    <p className="text-sm text-gray-300 mb-2">
-                      Java DSA Question
-                    </p>
-                    <div className="h-2 bg-gray-700 rounded">
-                      <div className="w-[60%] h-2 bg-blue-500 rounded"></div>
-                    </div>
+              {[
+                { name: "Java", desc: "Java DSA Question", color: "bg-yellow-100", text: "text-red-500", progress: "60%" },
+                { name: "JS", desc: "Javascript Practice", color: "bg-yellow-300", text: "text-black", progress: "40%" },
+                { name: "DART", desc: "Dart Practice", color: "bg-green-200", text: "text-blue-700", progress: "70%" },
+                { name: "Python", desc: "Python DSA", color: "bg-purple-200", text: "text-purple-700", progress: "50%" },
+                { name: "C++", desc: "STL Practice", color: "bg-blue-200", text: "text-blue-700", progress: "65%" },
+                { name: "React", desc: "Frontend Practice", color: "bg-cyan-200", text: "text-cyan-700", progress: "55%" },
+                { name: "Node", desc: "Backend Practice", color: "bg-green-300", text: "text-green-900", progress: "45%" },
+                { name: "AI", desc: "ML Basics", color: "bg-pink-200", text: "text-pink-700", progress: "35%" },
+              ].map((item, index) => (
+
+                <div key={index} className={`rounded-xl p-4 ${item.color}`}>
+                  <p className={`font-bold text-lg ${item.text}`}>
+                    {item.name}
+                  </p>
+
+                  <p className="text-xs mt-2 text-black">
+                    {item.desc}
+                  </p>
+
+                  <div className="mt-3 h-[2px] bg-gray-300">
+                    <div
+                      className="h-[2px] bg-blue-500"
+                      style={{ width: item.progress }}
+                    ></div>
                   </div>
-
-                  {/* JS */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <div className="bg-yellow-300 rounded-lg p-6 flex justify-center mb-4">
-                      <span className="text-black font-bold text-2xl">JS</span>
-                    </div>
-                    <p className="text-sm text-gray-300 mb-2">
-                      Javascript Practice Question
-                    </p>
-                    <div className="h-2 bg-gray-700 rounded">
-                      <div className="w-[40%] h-2 bg-blue-500 rounded"></div>
-                    </div>
-                  </div>
-
-                  {/* Dart */}
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <div className="bg-green-200 rounded-lg p-6 flex justify-center mb-4">
-                      <span className="text-blue-700 font-bold text-2xl">DART</span>
-                    </div>
-                    <p className="text-sm text-gray-300 mb-2">
-                      Dart Practice Question
-                    </p>
-                    <div className="h-2 bg-gray-700 rounded">
-                      <div className="w-[70%] h-2 bg-blue-500 rounded"></div>
-                    </div>
-                  </div>
-
-                  {/* Extra cards for scroll */}
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-6">
-                      <div className="bg-gray-600 rounded-lg p-6 mb-4"></div>
-                      <p className="text-sm text-gray-300">Extra Content</p>
-                    </div>
-                  ))}
-
                 </div>
-              </div>
+
+              ))}
+
             </div>
+          </div>
 
-            {/* RIGHT - CALENDAR (SCROLLABLE) */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col">
+        </div>
 
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-white text-sm">
-                  February 12, 2026
-                </h3>
+        {/* RIGHT CALENDAR */}
+        <div className="card-dark p-4 min-h-[300px]">
 
-                <div className="flex gap-2">
-                  <ChevronLeft className="text-gray-400 cursor-pointer" />
-                  <ChevronRight className="text-gray-400 cursor-pointer" />
+          <h3 className="text-white text-sm mb-4">
+            February 12, 2026
+          </h3>
+
+          <div className="h-[220px] overflow-y-auto space-y-4 text-xs">
+
+            {[
+              ["10:00", "Revise DSA Concepts"],
+              ["13:00", "Solve Important Question on Java"],
+              ["15:45", "Practice mock test on Java"],
+              ["18:00", "Learn System Design Basics"],
+              ["20:00", "Review Interview Notes"],
+              ["22:00", "Revision Session"],
+            ].map(([time, text], i) => (
+              <div key={i} className="flex gap-3">
+                <span className="text-gray-400 w-12">{time}</span>
+                <div className="bg-white/10 px-3 py-2 rounded-lg w-full">
+                  {text}
                 </div>
               </div>
-
-              <div className="overflow-y-auto max-h-[320px] space-y-4 pr-2 text-sm">
-
-                <div className="flex gap-3">
-                  <span className="text-gray-400 w-12">13:30</span>
-                  <div className="bg-green-500/20 text-green-400 px-3 py-2 rounded-lg text-xs">
-                    Solve Important Question on Java
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <span className="text-gray-400 w-12">16:45</span>
-                  <div className="bg-blue-500/20 text-blue-400 px-3 py-2 rounded-lg text-xs">
-                    Practice mock test on Java
-                  </div>
-                </div>
-
-                {/* Extra events */}
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="flex gap-3">
-                    <span className="text-gray-400 w-12">18:{i}0</span>
-                    <div className="bg-purple-500/20 text-purple-400 px-3 py-2 rounded-lg text-xs">
-                      Extra Event {i + 1}
-                    </div>
-                  </div>
-                ))}
-
-              </div>
-            </div>
+            ))}
 
           </div>
 
-          {/* 🔥 PERFORMANCE SECTION (FIGMA STYLE DARK) */}
+        </div>
+
+      </div>
+
+    {/* 🚀 PERFORMANCE SECTION */}
+{/* 🔥 PERFORMANCE SECTION (FIGMA STYLE DARK) */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-6">
 
             {/* TOP */}
@@ -305,12 +298,7 @@ const Learning = () => {
               </div>
 
             </div>
-
-          </div>
-
-        </div>
-
-        <Footer />
+      
 
       </div>
     </div>
