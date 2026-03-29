@@ -1,70 +1,87 @@
 import { Home, Book, Bot, Bell, User } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const menuItems = [
-  { icon: Home, label: "Home", view: "home" },
-  { icon: Book, label: "Learning", view: "learning" },
-  { icon: Bot, label: "AI", view: "ai" },
-  { icon: Bell, label: "Alerts", view: "alerts" },
-];
+const Sidebar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-const Sidebar = ({ onSelect, activeView }) => {
+  const menu = [
+    { icon: Home, path: "/" },
+    { icon: Book, path: "/learning" },
+    { icon: Bot, path: "/ai" },
+    { icon: Bell, path: "/notifications" },
+  ];
+
+  // ✅ Active route check (handles nested routes properly)
+  const isActive = (path) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  };
+
+  // ✅ Optimized navigation (no reload if same route)
+  const handleNavigate = (path) => {
+    if (!isActive(path)) {
+      navigate(path);
+    }
+  };
+
+  // ✅ Profile toggle logic
+  const handleProfileClick = () => {
+    if (location.pathname.startsWith("/profile")) {
+      navigate(-1); // go back (better UX)
+    } else {
+      navigate("/profile");
+    }
+  };
+
   return (
-    <div className="w-16 bg-[#0f172a] border-r border-white/10 flex flex-col items-center py-4">
+    <div className="w-16 h-screen bg-[#0f172a] border-r border-white/10 flex flex-col items-center py-6">
 
-      {/* 🔝 MENU (spacing reduced) */}
-      <div className="flex flex-col items-center gap-4 mt-14">
-        {/* 👆 gap reduced from 6 → 4 */}
+      {/* LOGO */}
+      <div className="mb-10">
+        <div className="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-xs font-bold text-white">
+          AI
+        </div>
+      </div>
 
-        {menuItems.map((item, index) => {
+      {/* TOP MENU */}
+      <div className="flex flex-col items-center gap-10">
+
+        {menu.map((item, index) => {
           const Icon = item.icon;
-          const isActive = activeView === item.view;
+          const active = isActive(item.path);
 
           return (
             <div
               key={index}
-              onClick={() => onSelect(item.view)}
-              className="flex flex-col items-center w-full group cursor-pointer relative"
+              onClick={() => handleNavigate(item.path)}
+              className="relative cursor-pointer group"
             >
+              {/* Active Indicator */}
+              {active && (
+                <span className="absolute -left-2 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-blue-500 rounded-full"></span>
+              )}
 
-             <div className="relative flex flex-col items-center">
-
-           {/* ACTIVE BAR */}
-           {isActive && (
-            <span className="absolute -left-2 top-1/2 -translate-y-1/2 h-8 w-1.5 bg-blue-500 rounded-full"></span>
-            )}
-
-            {/* ICON */}
-              <div className={`p-2 rounded-lg ${
-               isActive ? "bg-blue-500/20 text-white" : "text-gray-400"
-               }`}>
-              <Icon size={20} />
-            </div>
-
-            </div>
-
-              {/* LABEL */}
-              <span
-                className={`mt-1 text-[10px] transition ${
-                  isActive
-                    ? "text-blue-400 opacity-100"
-                    : "text-gray-400 opacity-0 group-hover:opacity-100"
+              <Icon
+                size={20}
+                className={`transition ${
+                  active
+                    ? "text-white"
+                    : "text-gray-400 group-hover:text-white"
                 }`}
-              >
-                {item.label}
-              </span>
-
+              />
             </div>
           );
         })}
 
       </div>
 
-      {/* 👤 PROFILE */}
+      {/* 🔥 PROFILE ICON */}
       <div className="mt-auto mb-4">
         <div
-          onClick={() => onSelect("profile")}
+          onClick={handleProfileClick}
           className={`w-9 h-9 rounded-full flex items-center justify-center cursor-pointer transition ${
-            activeView === "profile"
+            location.pathname.startsWith("/profile")
               ? "bg-blue-500 text-white"
               : "bg-gray-600 text-white hover:bg-gray-500"
           }`}

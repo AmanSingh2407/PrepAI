@@ -1,19 +1,24 @@
-import { ArrowLeft, Search, X } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
-const RoleBasedPage = () => {
+const CardPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [role, setRole] = useState("Android Developer");
+  const role = location.state?.role || "Software Developer";
+  const img = location.state?.img;
+
+  // ✅ STATE
   const [difficulty, setDifficulty] = useState("Intermediate");
-  const [mode, setMode] = useState("All");
+  const [mode, setMode] = useState("All"); // 🔥 default All
   const [codingTime, setCodingTime] = useState("15");
   const [duration, setDuration] = useState("15");
 
   const [customCoding, setCustomCoding] = useState("");
   const [customDuration, setCustomDuration] = useState("");
 
+  // ✅ BOX OPTION
   const BoxOption = ({ label, value, selected, onClick }) => (
     <div
       onClick={() => onClick(value)}
@@ -33,7 +38,7 @@ const RoleBasedPage = () => {
     </div>
   );
 
-  // ✅ NEXT BUTTON (UPDATED WITH TYPE)
+  // ✅ NEXT BUTTON
   const handleNext = () => {
     const finalCoding =
       codingTime === "Custom" ? customCoding || "15" : codingTime;
@@ -42,77 +47,71 @@ const RoleBasedPage = () => {
       duration === "Custom" ? customDuration || "15" : duration;
 
     const config = {
-      role: role || "Android Developer",
+      role,
       difficulty,
       mode,
       codingTime: finalCoding,
       duration: finalDuration,
+      fileName: "N/A",
     };
 
     navigate("/mock/instructions", {
-      state: { 
+      state: {
         config,
-        type: "role", // 🔥 ADDED (IMPORTANT)
+        type: "role",
+        from: "/mock/card",
       },
     });
   };
 
   return (
-    <div className="w-full h-[90vh] bg-[#0f172a] text-white px-6 py-4 flex flex-col overflow-hidden">
+    <div className="w-full min-h-screen bg-[#0f172a] text-white px-8 py-6">
 
-      {/* 🔙 HEADER */}
-      <div className="flex items-center px-6 py-3 border-b border-white/10 relative">
-
+      {/* 🔙 BACK ARROW */}
+      <div className="relative mb-4">
         <button
-          onClick={() => navigate("/mock/performance")}
-          className="absolute -left-2 -top-0.5 cursor-pointer z-50"
+          onClick={() => navigate("/")}
+          className="absolute -left-5 -top-3 cursor-pointer"
           style={{ background: "transparent", border: "none", padding: 0 }}
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={22} />
         </button>
+      </div>
 
-        <div className="flex-1 text-center">
-          <h1 className="text-sm font-semibold">
-            Role-Based Preparation Mode
-          </h1>
-          <p className="text-xs text-gray-400">
-            Customize your interview experience based on role and difficulty
+      {/* TITLE */}
+      <h1 className="text-xl font-semibold mb-6">{role}</h1>
+
+      {/* TOP */}
+      <div className="flex gap-6 mb-6">
+
+        {/* LEFT CARD */}
+        <div className="w-48 bg-[#1e293b] rounded-xl p-4 border border-white/10 text-center">
+          <img
+            src={
+              img ||
+              "https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+            }
+            className="w-20 h-20 mx-auto mb-3"
+            alt="role"
+          />
+          <p className="text-sm text-pink-400 font-medium">{role}</p>
+        </div>
+
+        {/* DESCRIPTION */}
+        <div className="flex-1 text-sm text-gray-300">
+          <p className="mb-3">
+            You will be evaluated on DSA, OOP, APIs, debugging and clean coding.
           </p>
         </div>
 
       </div>
 
-      {/* CONTENT */}
-      <div className="px-6 py-6 space-y-5">
-
-        {/* ROLE */}
-        <div>
-          <p className="text-sm mb-2">Role Selection</p>
-
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 text-gray-400" size={16} />
-            <input
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              placeholder="Enter role"
-              className="w-full pl-9 pr-9 py-2 rounded-md bg-[#1e293b] border border-white/10 text-sm focus:outline-none"
-            />
-            <X
-              size={16}
-              className="absolute right-3 top-2.5 text-gray-400 cursor-pointer"
-              onClick={() => setRole("")}
-            />
-          </div>
-
-          <div className="mt-2 bg-[#1e293b] border border-white/10 rounded-md px-3 py-2 text-sm">
-            {role || "No role selected"}
-          </div>
-        </div>
+      {/* OPTIONS */}
+      <div className="space-y-5">
 
         {/* DIFFICULTY */}
         <div>
           <p className="text-sm mb-2">Difficulty Level</p>
-
           <div className="grid grid-cols-3 gap-3">
             <BoxOption label="Beginner" value="Beginner" selected={difficulty} onClick={setDifficulty} />
             <BoxOption label="Intermediate" value="Intermediate" selected={difficulty} onClick={setDifficulty} />
@@ -120,10 +119,9 @@ const RoleBasedPage = () => {
           </div>
         </div>
 
-        {/* MODE */}
+        {/* 🔥 MODE (UPDATED WITH ALL) */}
         <div>
           <p className="text-sm mb-2">Preparation Mode</p>
-
           <div className="grid grid-cols-4 gap-3">
             <BoxOption label="Assessment" value="Assessment" selected={mode} onClick={setMode} />
             <BoxOption label="Interview" value="Interview" selected={mode} onClick={setMode} />
@@ -162,15 +160,11 @@ const RoleBasedPage = () => {
                       min="1"
                       placeholder="Enter minutes"
                       value={customCoding}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === "" || Number(val) > 0) {
-                          setCustomCoding(val);
-                        }
-                      }}
-                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500 focus:outline-none"
+                      onChange={(e) => setCustomCoding(e.target.value)}
+                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500"
                     />
                   )}
+
                 </div>
               );
             })}
@@ -207,34 +201,31 @@ const RoleBasedPage = () => {
                       min="1"
                       placeholder="Enter minutes"
                       value={customDuration}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === "" || Number(val) > 0) {
-                          setCustomDuration(val);
-                        }
-                      }}
-                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500 focus:outline-none"
+                      onChange={(e) => setCustomDuration(e.target.value)}
+                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500"
                     />
                   )}
+
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* BUTTON */}
-        <div className="flex justify-end pt-1">
-          <button
-            onClick={handleNext}
-            className="bg-blue-500 hover:bg-blue-600 transition px-6 py-2 rounded text-sm"
-          >
-            Next →
-          </button>
-        </div>
-
       </div>
+
+      {/* NEXT BUTTON */}
+      <div className="flex justify-end mt-8">
+        <button
+          onClick={handleNext}
+          className="bg-blue-500 hover:bg-blue-600 transition px-6 py-2 rounded text-sm"
+        >
+          Next →
+        </button>
+      </div>
+
     </div>
   );
 };
 
-export default RoleBasedPage;
+export default CardPage;

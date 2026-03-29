@@ -1,13 +1,43 @@
 import { ArrowLeft, Briefcase, FileText, User, Building2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const PerformancePage = ({ onBack, onRoleClick }) => {
+const PerformancePage = () => {
+  const navigate = useNavigate();
+
+  const features = [
+    {
+      title: "Role-Based Preparation",
+      desc: "Questions based on selected job role",
+      icon: <Briefcase size={18} />,
+      path: "/mock/role",
+    },
+    {
+      title: "Report-Based Preparation",
+      desc: "Turn performance into insights",
+      icon: <FileText size={18} />,
+      path: "/mock/report",
+    },
+    {
+      title: "Resume-Based Preparation",
+      desc: "AI asks from your projects",
+      icon: <User size={18} />,
+      path: "/mock/resume", // ✅ FIXED
+    },
+    {
+      title: "Company-Specific Mock",
+      desc: "Google / Amazon / TCS level prep",
+      icon: <Building2 size={18} />,
+      path: "/mock/company", // optional future
+    },
+  ];
+
   return (
     <div className="w-full min-h-screen bg-[#0f172a] p-6 text-white">
 
       {/* 🔙 BACK BUTTON */}
       <div className="relative">
         <button
-          onClick={onBack}
+          onClick={() => navigate("/mock")}
           className="absolute top-0 left-0 flex items-center gap-2 text-gray-400 hover:text-white transition"
         >
           <ArrowLeft size={18} />
@@ -27,31 +57,10 @@ const PerformancePage = ({ onBack, onRoleClick }) => {
 
           <div className="flex flex-col gap-4 flex-1">
 
-            {[
-              {
-                title: "Role-Based Preparation",
-                desc: "Questions based on selected job role",
-                icon: <Briefcase size={18} />
-              },
-              {
-                title: "Report-Based Preparation",
-                desc: "Turn performance into insights",
-                icon: <FileText size={18} />
-              },
-              {
-                title: "Resume-Based Preparation",
-                desc: "AI asks from your projects",
-                icon: <User size={18} />
-              },
-              {
-                title: "Company-Specific Mock",
-                desc: "Google / Amazon / TCS level prep",
-                icon: <Building2 size={18} />
-              }
-            ].map((item, i) => (
+            {features.map((item, i) => (
               <div
                 key={i}
-                onClick={i === 0 ? onRoleClick : undefined} // ✅ CLICK ADDED
+                onClick={() => navigate(item.path)} // ✅ CLEAN NAVIGATION
                 className="flex items-center gap-4 flex-1 min-h-0 bg-gradient-to-r from-[#0f172a] to-[#020617] border border-white/10 rounded-lg px-4 py-3 hover:scale-[1.02] hover:border-blue-500/40 transition-all duration-200 cursor-pointer"
               >
                 {/* ICON */}
@@ -74,7 +83,7 @@ const PerformancePage = ({ onBack, onRoleClick }) => {
           </div>
         </div>
 
-        {/* RIGHT */}
+        {/* 🔥 RIGHT SIDE (UNCHANGED) */}
         <div className="bg-[#1e293b] rounded-lg p-5 border border-white/10">
 
           <h2 className="text-lg font-semibold mb-4">
@@ -83,7 +92,6 @@ const PerformancePage = ({ onBack, onRoleClick }) => {
 
           <div className="grid md:grid-cols-2 gap-4">
 
-            {/* SCORE */}
             <div className="bg-[#0f172a] border border-white/10 rounded-md p-4">
               <h3 className="text-sm font-semibold text-gray-300 mb-3">
                 Your Score Breakdown:
@@ -105,12 +113,14 @@ const PerformancePage = ({ onBack, onRoleClick }) => {
                 ))}
               </div>
 
-              <button className="mt-4 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-sm">
+              <button
+                onClick={() => navigate("/mock")}
+                className="mt-4 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-sm"
+              >
                 Retake Interview
               </button>
             </div>
 
-            {/* TOTAL */}
             <div className="bg-[#0f172a] border border-white/10 rounded-md p-4">
               <h3 className="text-sm font-semibold text-gray-300 mb-3">
                 Total Score Earned
@@ -135,7 +145,6 @@ const PerformancePage = ({ onBack, onRoleClick }) => {
 
           </div>
 
-          {/* AI SUGGESTION */}
           <div className="bg-[#0f172a] border border-white/10 rounded-md p-4 mt-4">
             <h3 className="text-sm font-semibold text-gray-300 mb-2">
               AI Suggestion:

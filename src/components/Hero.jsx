@@ -1,45 +1,54 @@
+import { useNavigate } from "react-router-dom";
+
 const Hero = ({ type = "home" }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="card-dark px-8 py-6 rounded-xl flex flex-col lg:flex-row items-center justify-between gap-6">
 
-      {/* LEFT */}
       <div className="flex-1 max-w-[520px]">
 
-        {/* TITLE */}
-        <h1 className="text-3xl lg:text-4xl font-semibold text-white leading-tight tracking-tight">
+        <h1 className="text-3xl lg:text-4xl font-semibold text-white">
           {type === "learning"
             ? "Welcome Back, Aman!"
             : "Welcome to AI Interviewer 🚀"}
         </h1>
 
-        {/* SUBTEXT */}
-        <p className="text-gray-400 text-sm mt-2 leading-relaxed">
+        <p className="text-gray-400 text-sm mt-2">
           {type === "learning"
             ? "Let’s conquer your interview today."
             : "Practice interviews, improve skills and get hired."}
         </p>
 
-        {/* BUTTONS */}
-        <div className="mt-6 flex gap-4 flex-wrap">
+        <div className="mt-6 flex gap-4">
 
           {type === "learning" ? (
             <>
-              <button className="btn-primary glow px-5 py-2 text-sm font-medium">
+              <button className="btn-primary px-5 py-2">
                 Community Hub
               </button>
 
-              <button className="btn-primary glow opacity-90 px-5 py-2 text-sm font-medium">
+              <button
+                onClick={() => navigate("/mock/performance")}
+                className="btn-primary opacity-90 px-5 py-2"
+              >
                 Start a Mock Test
               </button>
             </>
           ) : (
             <>
-              <button className="btn-primary glow px-5 py-2 text-sm font-medium">
+              <button
+                onClick={() => navigate("/mock/performance")} // ✅ FIXED
+                className="btn-primary px-5 py-2"
+              >
                 Start Interview
               </button>
 
-              <button className="btn-primary glow opacity-90 px-5 py-2 text-sm font-medium">
-                Explore
+               <button
+                 onClick={() => navigate("/community")}
+                 className="btn-primary text-sm px-5 py-2"
+                >
+               Community Hub
               </button>
             </>
           )}
@@ -47,37 +56,12 @@ const Hero = ({ type = "home" }) => {
         </div>
       </div>
 
-      {/* RIGHT */}
       <div className="flex-1 flex justify-center lg:justify-end">
-
-        {type === "learning" ? (
-          <div className="grid grid-cols-4 gap-6 text-center">
-
-            {[
-              ["12", "Total Learning"],
-              ["87%", "Study Time"],
-              ["155h", "Total Study"],
-              ["85/100", "Test Score"]
-            ].map(([value, label], i) => (
-              <div key={i}>
-                <p className="text-xl font-semibold text-white">
-                  {value}
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  {label}
-                </p>
-              </div>
-            ))}
-
-          </div>
-        ) : (
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
-            className="w-56 lg:w-64 object-contain"
-            alt="hero"
-          />
-        )}
-
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+          className="w-56 lg:w-64"
+          alt="hero"
+        />
       </div>
 
     </div>

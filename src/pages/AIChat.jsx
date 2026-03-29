@@ -1,20 +1,27 @@
 import { Send, ArrowLeft } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const AIChat = ({ initialMessage, onBack }) => {
+const AIChat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
   const bottomRef = useRef(null);
 
-  //  AUTO SEND FIRST MESSAGE
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // ✅ get message from AISection
+  const initialMessage = location.state?.message || "";
+
+  // ✅ AUTO SEND FIRST MESSAGE (only once)
   useEffect(() => {
-    if (initialMessage) {
+    if (initialMessage && messages.length === 0) {
       sendMessage(initialMessage);
     }
   }, [initialMessage]);
 
-  //  AUTO SCROLL
+  // ✅ AUTO SCROLL
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -22,13 +29,12 @@ const AIChat = ({ initialMessage, onBack }) => {
   const sendMessage = (msg = input) => {
     if (!msg.trim()) return;
 
-    setMessages((prev) => [
-      ...prev,
-      { type: "user", text: msg },
-    ]);
+    const userMsg = { type: "user", text: msg };
 
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
 
+    // 🤖 fake AI response (replace with API later)
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -40,25 +46,25 @@ const AIChat = ({ initialMessage, onBack }) => {
   return (
     <div className="h-full flex flex-col">
 
-      {/*  TOP BAR */}
+      {/* 🔙 TOP BAR */}
       <div className="flex items-center px-6 py-4">
         <ArrowLeft
-          onClick={onBack}
-          className="text-gray-400 cursor-pointer hover:text-white"
+          onClick={() => navigate("/ai")}
+          className="text-gray-400 cursor-pointer hover:text-white transition"
         />
         <h2 className="ml-3 text-white text-sm font-semibold">
           AI Chat
         </h2>
       </div>
 
-      {/*  CHAT AREA */}
+      {/* 💬 CHAT AREA */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
 
         <div className="max-w-3xl mx-auto space-y-6">
 
           {messages.length === 0 && (
             <div className="text-center text-gray-400 mt-20">
-              Ask anything 
+              Ask anything
             </div>
           )}
 
@@ -86,7 +92,7 @@ const AIChat = ({ initialMessage, onBack }) => {
         </div>
       </div>
 
-      {/*  INPUT BAR */}
+      {/* ✏️ INPUT BAR */}
       <div className="pb-6 px-4 sm:px-6">
 
         <div className="max-w-3xl mx-auto flex items-center bg-[#1e293b] rounded-full px-4 py-3 border border-white/10">
@@ -102,7 +108,7 @@ const AIChat = ({ initialMessage, onBack }) => {
           />
 
           <Send
-            onClick={() => sendMessage()}
+            onClick={sendMessage}
             className="text-blue-400 cursor-pointer"
           />
         </div>

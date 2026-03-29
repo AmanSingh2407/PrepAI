@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -7,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
+
 const data = [
   { day: "Mon", score: 60 },
   { day: "Tue", score: 80 },
@@ -16,14 +18,15 @@ const data = [
 ];
 
 const Learning = () => {
+  const navigate = useNavigate();
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
 
       {/* 🔥 TOP CARD */}
-      <div className="card-dark px-6 py-6 min-h-[220px] flex flex-col lg:flex-row justify-between items-center">
+      <div className="card-dark px-6 py-6 min-h-[40vh] flex flex-col lg:flex-row justify-between items-center">
 
         <div>
-          <h1 className="text-2xl font-semibold text-white">
+          <h1 className="text-3xl font-semibold text-white">
             Welcome Back, Aman!
           </h1>
 
@@ -32,13 +35,19 @@ const Learning = () => {
           </p>
 
           <div className="flex gap-3 mt-5">
-            <button className="btn-primary text-sm px-4 py-2">
-              Community Hub
-            </button>
+            <button
+  onClick={() => navigate("/community")}
+  className="btn-primary text-sm px-4 py-2"
+>
+  Community Hub
+</button>
 
-            <button className="btn-primary text-sm px-4 py-2 opacity-90">
-              Start a Mock Test
-            </button>
+            <button
+                onClick={() => navigate("/mock/performance")}
+                className="btn-primary opacity-90 px-5 py-2"
+              >
+                Start a Mock Test
+              </button>
           </div>
         </div>
 
@@ -143,164 +152,134 @@ const Learning = () => {
 
       </div>
 
-    {/* 🚀 PERFORMANCE SECTION */}
-{/* 🔥 PERFORMANCE SECTION (FIGMA STYLE DARK) */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-6">
+      {/* 🔥 PERFORMANCE SECTION */}
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-6">
 
-            {/* TOP */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-5 flex justify-between items-center">
+        {/* TOP */}
+        <div className="bg-white/5 border border-white/10 rounded-xl p-5 flex justify-between items-center">
 
-              <div>
-                <p className="text-green-400 font-medium">
-                  ✔ You completed the mock test on Java DSA.
-                </p>
+          <div>
+            <p className="text-green-400 font-medium">
+              ✔ You completed the mock test on Java DSA.
+            </p>
 
-                <div className="flex gap-6 text-xs text-gray-400 mt-2">
-                  <span>Attempt Date: Today</span>
-                  <span>Duration: 19 mins</span>
-                </div>
-
-                <div className="flex gap-6 text-sm mt-3 text-gray-300">
-                  <span>Overall Score 78</span>
-                  <span>🏅 Rank: 4 of 25</span>
-                  <span>🎯 Accuracy: 80%</span>
-                </div>
-              </div>
-
-              <div className="w-20 h-20 rounded-full border-4 border-green-400 flex flex-col items-center justify-center text-white">
-                <span className="text-xl font-bold">78</span>
-                <span className="text-xs text-gray-400">Above Avg</span>
-              </div>
+            <div className="flex gap-6 text-xs text-gray-400 mt-2">
+              <span>Attempt Date: Today</span>
+              <span>Duration: 19 mins</span>
             </div>
 
-            {/* GRID */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div className="flex gap-6 text-sm mt-3 text-gray-300">
+              <span>Overall Score 78</span>
+              <span>🏅 Rank: 4 of 25</span>
+              <span>🎯 Accuracy: 80%</span>
+            </div>
+          </div>
 
-              {/* Performance */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white text-sm mb-3">Today's Performance</h3>
+          <div className="w-20 h-20 rounded-full border-4 border-green-400 flex flex-col items-center justify-center text-white">
+            <span className="text-xl font-bold">78</span>
+            <span className="text-xs text-gray-400">Above Avg</span>
+          </div>
+        </div>
 
-                <div className="space-y-2 text-sm text-gray-300">
-                  <p>✔ Questions Attempted: 10</p>
-                  <p>✔ Questions Correct: 8</p>
-                  <p>✔ Avg Time: 1m 54 sec</p>
-                </div>
+        {/* GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-                <button className="mt-4 bg-blue-500 px-3 py-1 rounded text-white text-xs">
-                  Practice Again
-                </button>
-              </div>
+          {/* Performance */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <h3 className="text-white text-sm mb-3">Today's Performance</h3>
 
-              {/* Review */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white text-sm mb-3">Review Report</h3>
-
-                <p className="text-red-400 text-sm">❌ Binary Search</p>
-                <p className="text-red-400 text-sm">❌ Permutations</p>
-              </div>
-
-              {/* Chart */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white text-sm mb-3">Performance Overview</h3>
-
-               <div className="flex-1">
-  <ResponsiveContainer width="100%" height={120}>
-    <LineChart data={data}>
-      
-      <XAxis 
-        dataKey="day" 
-        stroke="#9ca3af" 
-        fontSize={10} 
-      />
-
-      <YAxis 
-        stroke="#9ca3af" 
-        fontSize={10} 
-        domain={[0, 100]} 
-      />
-
-      <Tooltip 
-        contentStyle={{ 
-          backgroundColor: "#1e293b", 
-          border: "none",
-          borderRadius: "8px"
-        }} 
-      />
-
-      <Line
-        type="monotone"
-        dataKey="score"
-        stroke="#3b82f6"
-        strokeWidth={2}
-        dot={{ r: 3 }}
-      />
-    </LineChart>
-  </ResponsiveContainer>
-</div>
-              </div>
-
-              {/* AI Coach */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white text-sm mb-3">AI Coach</h3>
-
-                <ul className="text-gray-300 text-xs space-y-2">
-                  <li>• Improve binary search</li>
-                  <li>• Focus recursion</li>
-                  <li>• Optimize solutions</li>
-                </ul>
-
-                <button className="mt-4 bg-blue-500 px-3 py-1 rounded text-white text-xs">
-                  Ask AI
-                </button>
-              </div>
-
+            <div className="space-y-2 text-sm text-gray-300">
+              <p>✔ Questions Attempted: 10</p>
+              <p>✔ Questions Correct: 8</p>
+              <p>✔ Avg Time: 1m 54 sec</p>
             </div>
 
-            {/* BOTTOM */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <button
+  onClick={() => navigate("/mock/performance")}
+  className="mt-4 bg-blue-500 px-3 py-1 rounded text-white text-xs"
+>
+  Practice Again
+</button>
+          </div>
 
-              {/* Suggestions */}
-              <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white text-sm mb-3">
-                  💡 Key Improvement Suggestions
-                </h3>
+          {/* Review */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <h3 className="text-white text-sm mb-3">Review Report</h3>
 
-                <ul className="text-gray-300 text-sm space-y-2">
-                  <li>• Review binary search edge cases</li>
-                  <li>• Optimize time complexity</li>
-                  <li>• Focus on recursion</li>
-                </ul>
-              </div>
+            <p className="text-red-400 text-sm">❌ Binary Search</p>
+            <p className="text-red-400 text-sm">❌ Permutations</p>
+          </div>
 
-              {/* Weakest Topics */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white text-sm mb-3">Weakest Topics</h3>
+          {/* Chart */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <h3 className="text-white text-sm mb-3">Performance Overview</h3>
 
-                <div className="space-y-3 text-sm">
+            <ResponsiveContainer width="100%" height={120}>
+              <LineChart data={data}>
+                <XAxis dataKey="day" stroke="#9ca3af" fontSize={10} />
+                <YAxis stroke="#9ca3af" fontSize={10} domain={[0, 100]} />
+                <Tooltip contentStyle={{ backgroundColor: "#1e293b", border: "none", borderRadius: "8px" }} />
+                <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
 
-                  {[
-                    { name: "Dynamic Programming", width: "40%" },
-                    { name: "Recursion", width: "75%" },
-                    { name: "Graph", width: "60%" },
-                  ].map((item, i) => (
-                    <div key={i}>
-                      <p className="text-gray-300">{item.name}</p>
-                      <div className="h-2 bg-gray-700 rounded">
-                        <div
-                          className="h-2 bg-green-400 rounded"
-                          style={{ width: item.width }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+          {/* AI Coach */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <h3 className="text-white text-sm mb-3">AI Coach</h3>
 
+            <ul className="text-gray-300 text-xs space-y-2">
+              <li>• Improve binary search</li>
+              <li>• Focus recursion</li>
+              <li>• Optimize solutions</li>
+            </ul>
+
+            <button 
+            onClick={() => navigate("/aichat")}
+            className="mt-4 bg-blue-500 px-3 py-1 rounded text-white text-xs">
+              Ask AI 
+            </button>
+          </div>
+
+        </div>
+
+        {/* BOTTOM */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+          <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-xl p-4">
+            <h3 className="text-white text-sm mb-3">
+              💡 Key Improvement Suggestions
+            </h3>
+
+            <ul className="text-gray-300 text-sm space-y-2">
+              <li>• Review binary search edge cases</li>
+              <li>• Optimize time complexity</li>
+              <li>• Focus on recursion</li>
+            </ul>
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <h3 className="text-white text-sm mb-3">Weakest Topics</h3>
+
+            {[
+              { name: "Dynamic Programming", width: "40%" },
+              { name: "Recursion", width: "75%" },
+              { name: "Graph", width: "60%" },
+            ].map((item, i) => (
+              <div key={i} className="mb-3">
+                <p className="text-gray-300">{item.name}</p>
+                <div className="h-2 bg-gray-700 rounded">
+                  <div className="h-2 bg-green-400 rounded" style={{ width: item.width }}></div>
                 </div>
               </div>
+            ))}
 
-            </div>
-      
+          </div>
+
+        </div>
 
       </div>
+
     </div>
   );
 };

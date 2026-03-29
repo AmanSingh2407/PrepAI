@@ -2,10 +2,12 @@ import { ArrowLeft, Search, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RoleBasedPage = () => {
+const CompanyBasedPage = () => {
   const navigate = useNavigate();
 
+  const [company, setCompany] = useState("Google");
   const [role, setRole] = useState("Android Developer");
+
   const [difficulty, setDifficulty] = useState("Intermediate");
   const [mode, setMode] = useState("All");
   const [codingTime, setCodingTime] = useState("15");
@@ -14,10 +16,11 @@ const RoleBasedPage = () => {
   const [customCoding, setCustomCoding] = useState("");
   const [customDuration, setCustomDuration] = useState("");
 
+  // ✅ FIXED OPTION BOX (NO OVERFLOW)
   const BoxOption = ({ label, value, selected, onClick }) => (
     <div
       onClick={() => onClick(value)}
-      className={`flex items-center gap-2 px-4 py-2 rounded-md border text-sm cursor-pointer transition w-full justify-center
+      className={`flex items-center gap-2 px-4 py-2 rounded-md border text-sm cursor-pointer transition
       ${
         selected === value
           ? "bg-blue-500/20 border-blue-500"
@@ -33,7 +36,7 @@ const RoleBasedPage = () => {
     </div>
   );
 
-  // ✅ NEXT BUTTON (UPDATED WITH TYPE)
+  // ✅ NEXT BUTTON
   const handleNext = () => {
     const finalCoding =
       codingTime === "Custom" ? customCoding || "15" : codingTime;
@@ -42,7 +45,9 @@ const RoleBasedPage = () => {
       duration === "Custom" ? customDuration || "15" : duration;
 
     const config = {
-      role: role || "Android Developer",
+      type: "company",
+      company,
+      role,
       difficulty,
       mode,
       codingTime: finalCoding,
@@ -50,33 +55,32 @@ const RoleBasedPage = () => {
     };
 
     navigate("/mock/instructions", {
-      state: { 
+      state: {
         config,
-        type: "role", // 🔥 ADDED (IMPORTANT)
+        from: "/mock/company",
       },
     });
   };
 
   return (
-    <div className="w-full h-[90vh] bg-[#0f172a] text-white px-6 py-4 flex flex-col overflow-hidden">
+    <div className="w-full h-full bg-[#0f172a] text-white px-6 py-4 flex flex-col overflow-y-auto">
 
       {/* 🔙 HEADER */}
       <div className="flex items-center px-6 py-3 border-b border-white/10 relative">
 
         <button
           onClick={() => navigate("/mock/performance")}
-          className="absolute -left-2 -top-0.5 cursor-pointer z-50"
-          style={{ background: "transparent", border: "none", padding: 0 }}
+          className="absolute left-0 top-1 z-50 -translate-x-1 cursor-pointer"
         >
           <ArrowLeft size={20} />
         </button>
 
         <div className="flex-1 text-center">
           <h1 className="text-sm font-semibold">
-            Role-Based Preparation Mode
+            Company-Based Preparation Mode
           </h1>
           <p className="text-xs text-gray-400">
-            Customize your interview experience based on role and difficulty
+            Customize your interview based on company and role
           </p>
         </div>
 
@@ -84,6 +88,30 @@ const RoleBasedPage = () => {
 
       {/* CONTENT */}
       <div className="px-6 py-6 space-y-5">
+
+        {/* COMPANY */}
+        <div>
+          <p className="text-sm mb-2">Company Selection</p>
+
+          <div className="relative">
+            <Search className="absolute left-3 top-2.5 text-gray-400" size={16} />
+            <input
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder="Enter company"
+              className="w-full pl-9 pr-9 py-2 rounded-md bg-[#1e293b] border border-white/10 text-sm focus:outline-none"
+            />
+            <X
+              size={16}
+              className="absolute right-3 top-2.5 text-gray-400 cursor-pointer"
+              onClick={() => setCompany("")}
+            />
+          </div>
+
+          <div className="mt-2 bg-[#1e293b] border border-white/10 rounded-md px-3 py-2 text-sm">
+            {company || "No company selected"}
+          </div>
+        </div>
 
         {/* ROLE */}
         <div>
@@ -112,7 +140,6 @@ const RoleBasedPage = () => {
         {/* DIFFICULTY */}
         <div>
           <p className="text-sm mb-2">Difficulty Level</p>
-
           <div className="grid grid-cols-3 gap-3">
             <BoxOption label="Beginner" value="Beginner" selected={difficulty} onClick={setDifficulty} />
             <BoxOption label="Intermediate" value="Intermediate" selected={difficulty} onClick={setDifficulty} />
@@ -123,8 +150,7 @@ const RoleBasedPage = () => {
         {/* MODE */}
         <div>
           <p className="text-sm mb-2">Preparation Mode</p>
-
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <BoxOption label="Assessment" value="Assessment" selected={mode} onClick={setMode} />
             <BoxOption label="Interview" value="Interview" selected={mode} onClick={setMode} />
             <BoxOption label="Technical Round" value="Technical Round" selected={mode} onClick={setMode} />
@@ -135,14 +161,12 @@ const RoleBasedPage = () => {
         {/* CODING TIME */}
         <div>
           <p className="text-sm mb-2">Coding Time</p>
-
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {["15", "30", "45", "Custom"].map((t) => {
               const isCustom = t === "Custom";
 
               return (
                 <div key={t} className="flex flex-col">
-
                   <BoxOption
                     label={
                       isCustom && customCoding
@@ -160,15 +184,9 @@ const RoleBasedPage = () => {
                     <input
                       type="number"
                       min="1"
-                      placeholder="Enter minutes"
                       value={customCoding}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === "" || Number(val) > 0) {
-                          setCustomCoding(val);
-                        }
-                      }}
-                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500 focus:outline-none"
+                      onChange={(e) => setCustomCoding(e.target.value)}
+                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500"
                     />
                   )}
                 </div>
@@ -180,14 +198,12 @@ const RoleBasedPage = () => {
         {/* DURATION */}
         <div>
           <p className="text-sm mb-2">Duration</p>
-
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {["15", "30", "45", "Custom"].map((t) => {
               const isCustom = t === "Custom";
 
               return (
                 <div key={t} className="flex flex-col">
-
                   <BoxOption
                     label={
                       isCustom && customDuration
@@ -205,15 +221,9 @@ const RoleBasedPage = () => {
                     <input
                       type="number"
                       min="1"
-                      placeholder="Enter minutes"
                       value={customDuration}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === "" || Number(val) > 0) {
-                          setCustomDuration(val);
-                        }
-                      }}
-                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500 focus:outline-none"
+                      onChange={(e) => setCustomDuration(e.target.value)}
+                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500"
                     />
                   )}
                 </div>
@@ -237,4 +247,4 @@ const RoleBasedPage = () => {
   );
 };
 
-export default RoleBasedPage;
+export default CompanyBasedPage;

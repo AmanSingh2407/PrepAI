@@ -1,20 +1,20 @@
-import { ArrowLeft, Search, X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RoleBasedPage = () => {
+const ResumeBasedPage = () => {
   const navigate = useNavigate();
 
-  const [role, setRole] = useState("Android Developer");
   const [difficulty, setDifficulty] = useState("Intermediate");
-  const [mode, setMode] = useState("All");
+  const [mode, setMode] = useState("Assessment");
   const [codingTime, setCodingTime] = useState("15");
   const [duration, setDuration] = useState("15");
 
   const [customCoding, setCustomCoding] = useState("");
   const [customDuration, setCustomDuration] = useState("");
+  const [file, setFile] = useState(null);
 
-  const BoxOption = ({ label, value, selected, onClick }) => (
+  const Option = ({ label, value, selected, onClick }) => (
     <div
       onClick={() => onClick(value)}
       className={`flex items-center gap-2 px-4 py-2 rounded-md border text-sm cursor-pointer transition w-full justify-center
@@ -33,8 +33,13 @@ const RoleBasedPage = () => {
     </div>
   );
 
-  // ✅ NEXT BUTTON (UPDATED WITH TYPE)
+  // ✅ NEXT BUTTON (ONLY LOGIC UPDATED)
   const handleNext = () => {
+    if (!file) {
+      alert("Please upload your resume first");
+      return;
+    }
+
     const finalCoding =
       codingTime === "Custom" ? customCoding || "15" : codingTime;
 
@@ -42,7 +47,8 @@ const RoleBasedPage = () => {
       duration === "Custom" ? customDuration || "15" : duration;
 
     const config = {
-      role: role || "Android Developer",
+      type: "resume",
+      fileName: file.name,
       difficulty,
       mode,
       codingTime: finalCoding,
@@ -50,100 +56,144 @@ const RoleBasedPage = () => {
     };
 
     navigate("/mock/instructions", {
-      state: { 
+      state: {
         config,
-        type: "role", // 🔥 ADDED (IMPORTANT)
+        from: "/mock/resume", // 🔥 IMPORTANT FIX (NO UI CHANGE)
       },
     });
   };
 
   return (
-    <div className="w-full h-[90vh] bg-[#0f172a] text-white px-6 py-4 flex flex-col overflow-hidden">
+    <div className="w-full h-full bg-[#0f172a] text-white px-6 py-4 flex flex-col overflow-y-auto">
 
       {/* 🔙 HEADER */}
       <div className="flex items-center px-6 py-3 border-b border-white/10 relative">
-
         <button
           onClick={() => navigate("/mock/performance")}
-          className="absolute -left-2 -top-0.5 cursor-pointer z-50"
-          style={{ background: "transparent", border: "none", padding: 0 }}
+          className="absolute -left-2 -top-0.5 cursor-pointer"
         >
           <ArrowLeft size={20} />
         </button>
 
         <div className="flex-1 text-center">
           <h1 className="text-sm font-semibold">
-            Role-Based Preparation Mode
+            Resume-Based Preparation
           </h1>
           <p className="text-xs text-gray-400">
-            Customize your interview experience based on role and difficulty
+            Get personalized mock interviews based on your resume
           </p>
         </div>
-
       </div>
 
-      {/* CONTENT */}
-      <div className="px-6 py-6 space-y-5">
+      {/* 📦 CONTENT */}
+      <div className="px-6 py-6 space-y-5 pb-20">
 
-        {/* ROLE */}
-        <div>
-          <p className="text-sm mb-2">Role Selection</p>
+        {/* 🔼 UPLOAD SECTION */}
+        <div className="flex gap-12 items-center">
 
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 text-gray-400" size={16} />
+          {/* UPLOAD CARD */}
+          <div className="bg-[#1e293b] w-[300px] h-[240px] rounded-md border border-white/10 flex flex-col items-center justify-center text-center p-5">
+
+            <div className="w-14 h-14 bg-blue-500/20 rounded-full flex items-center justify-center mb-3">
+              <svg
+                className="w-7 h-7 text-blue-400"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+              </svg>
+            </div>
+
+            <p className="text-xs text-gray-300">
+              Drag & drop or click to upload
+            </p>
+
+            <p className="text-[11px] text-gray-500 mb-3">
+              PDF / DOCX / DOC
+            </p>
+
             <input
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              placeholder="Enter role"
-              className="w-full pl-9 pr-9 py-2 rounded-md bg-[#1e293b] border border-white/10 text-sm focus:outline-none"
+              type="file"
+              accept=".pdf,.doc,.docx"
+              id="resumeUpload"
+              className="hidden"
+              onChange={(e) => setFile(e.target.files[0])}
             />
-            <X
-              size={16}
-              className="absolute right-3 top-2.5 text-gray-400 cursor-pointer"
-              onClick={() => setRole("")}
-            />
+
+            <label
+              htmlFor="resumeUpload"
+              className="bg-blue-500 hover:bg-blue-600 px-4 py-1.5 rounded text-xs cursor-pointer"
+            >
+              Upload Resume
+            </label>
+
+            {file && (
+              <p className="text-[11px] text-green-400 mt-2 truncate w-full">
+                {file.name}
+              </p>
+            )}
           </div>
 
-          <div className="mt-2 bg-[#1e293b] border border-white/10 rounded-md px-3 py-2 text-sm">
-            {role || "No role selected"}
+          {/* RIGHT TEXT */}
+          <div>
+            <h2 className="text-sm font-semibold mb-2">
+              Upload Your Resume
+            </h2>
+
+            <p className="text-xs text-gray-400 max-w-md">
+              AI will analyze your resume and tailor interview questions based
+              on your skills and experience.
+            </p>
+
+            <p className="text-xs text-gray-300 mt-2">
+              Max. Size: 2MB
+            </p>
+
+            <p className="text-xs text-gray-500 mt-1">
+              Supported Formats: PDF, DOCX, DOC
+            </p>
+
+            <p className="text-xs text-gray-500 mt-1">
+              Example: Name, Email, Skills, Projects, Experience
+            </p>
           </div>
+
         </div>
+
+        {/* 🎯 OPTIONS (UNCHANGED) */}
 
         {/* DIFFICULTY */}
         <div>
           <p className="text-sm mb-2">Difficulty Level</p>
-
           <div className="grid grid-cols-3 gap-3">
-            <BoxOption label="Beginner" value="Beginner" selected={difficulty} onClick={setDifficulty} />
-            <BoxOption label="Intermediate" value="Intermediate" selected={difficulty} onClick={setDifficulty} />
-            <BoxOption label="Advanced" value="Advanced" selected={difficulty} onClick={setDifficulty} />
+            <Option label="Beginner" value="Beginner" selected={difficulty} onClick={setDifficulty} />
+            <Option label="Intermediate" value="Intermediate" selected={difficulty} onClick={setDifficulty} />
+            <Option label="Advanced" value="Advanced" selected={difficulty} onClick={setDifficulty} />
           </div>
         </div>
 
         {/* MODE */}
         <div>
           <p className="text-sm mb-2">Preparation Mode</p>
-
           <div className="grid grid-cols-4 gap-3">
-            <BoxOption label="Assessment" value="Assessment" selected={mode} onClick={setMode} />
-            <BoxOption label="Interview" value="Interview" selected={mode} onClick={setMode} />
-            <BoxOption label="Technical Round" value="Technical Round" selected={mode} onClick={setMode} />
-            <BoxOption label="All" value="All" selected={mode} onClick={setMode} />
+            <Option label="Assessment" value="Assessment" selected={mode} onClick={setMode} />
+            <Option label="Interview" value="Interview" selected={mode} onClick={setMode} />
+            <Option label="Technical Round" value="Technical Round" selected={mode} onClick={setMode} />
+            <Option label="All" value="All" selected={mode} onClick={setMode} />
           </div>
         </div>
 
         {/* CODING TIME */}
         <div>
           <p className="text-sm mb-2">Coding Time</p>
-
           <div className="grid grid-cols-4 gap-3">
             {["15", "30", "45", "Custom"].map((t) => {
               const isCustom = t === "Custom";
-
               return (
                 <div key={t} className="flex flex-col">
-
-                  <BoxOption
+                  <Option
                     label={
                       isCustom && customCoding
                         ? `${customCoding} Minutes`
@@ -160,15 +210,9 @@ const RoleBasedPage = () => {
                     <input
                       type="number"
                       min="1"
-                      placeholder="Enter minutes"
                       value={customCoding}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === "" || Number(val) > 0) {
-                          setCustomCoding(val);
-                        }
-                      }}
-                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500 focus:outline-none"
+                      onChange={(e) => setCustomCoding(e.target.value)}
+                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500"
                     />
                   )}
                 </div>
@@ -180,15 +224,12 @@ const RoleBasedPage = () => {
         {/* DURATION */}
         <div>
           <p className="text-sm mb-2">Duration</p>
-
           <div className="grid grid-cols-4 gap-3">
             {["15", "30", "45", "Custom"].map((t) => {
               const isCustom = t === "Custom";
-
               return (
                 <div key={t} className="flex flex-col">
-
-                  <BoxOption
+                  <Option
                     label={
                       isCustom && customDuration
                         ? `${customDuration} Minutes`
@@ -205,15 +246,9 @@ const RoleBasedPage = () => {
                     <input
                       type="number"
                       min="1"
-                      placeholder="Enter minutes"
                       value={customDuration}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === "" || Number(val) > 0) {
-                          setCustomDuration(val);
-                        }
-                      }}
-                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500 focus:outline-none"
+                      onChange={(e) => setCustomDuration(e.target.value)}
+                      className="mt-2 px-3 py-2 text-sm rounded bg-[#0f172a] border border-blue-500"
                     />
                   )}
                 </div>
@@ -237,4 +272,4 @@ const RoleBasedPage = () => {
   );
 };
 
-export default RoleBasedPage;
+export default ResumeBasedPage;

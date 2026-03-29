@@ -1,83 +1,139 @@
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, X } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-const LoginPage = ({ onClose, onSwitch }) => {
+const LoginPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // ✅ FIX: preserve original background
+  const background = location.state?.background || location;
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // ✅ ESC KEY CLOSE
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        navigate(-1);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [navigate]);
+
+  const handleLogin = () => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser) {
+      alert("No account found. Please signup first.");
+      return;
+    }
+
+    if (
+      storedUser.email === email &&
+      storedUser.password === password
+    ) {
+      alert("Login Successful ✅");
+      navigate("/");
+    } else {
+      alert("Invalid credentials ❌");
+    }
+  };
+
   return (
-    <div className="card-dark p-8 w-[360px] relative animate-scaleIn shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
 
-      {/* Close */}
-      <button
-        onClick={onClose}
-        className="absolute top-3 right-3 text-gray-400 hover:text-white"
-      >
-        ✕
-      </button>
+      {/* ✅ BLUR BACKGROUND */}
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-md"
+        onClick={() => navigate(-1)}
+      />
 
-      {/* Heading */}
-      <h2 className="text-2xl font-bold text-white mb-2">
-        Login Account
-      </h2>
+      {/* ✅ MODAL */}
+      <div className="relative z-10 w-[380px] rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 shadow-2xl">
 
-      <p className="text-gray-400 text-sm mb-6">
-        Login to continue your account
-      </p>
-
-      {/* Email */}
-      <div className="flex items-center bg-[#1e293b] rounded-full px-4 py-2 mb-3 border border-white/10">
-        <input
-          type="email"
-          placeholder="Email Address"
-          className="bg-transparent outline-none flex-1 text-white text-sm"
-        />
-        <Mail size={16} className="text-gray-400" />
-      </div>
-
-      {/* Password */}
-      <div className="flex items-center bg-[#1e293b] rounded-full px-4 py-2 mb-2 border border-white/10">
-        <input
-          type="password"
-          placeholder="Password"
-          className="bg-transparent outline-none flex-1 text-white text-sm"
-        />
-        <Lock size={16} className="text-gray-400" />
-      </div>
-
-      {/* Forgot */}
-      <p className="text-xs text-right text-gray-400 mb-4 cursor-pointer">
-        Forget Password?
-      </p>
-
-      {/* Button */}
-      <button className="w-full btn-primary py-2 mb-4 rounded-full">
-        Login Account
-      </button>
-
-      {/* Divider */}
-      <div className="flex items-center my-3">
-        <hr className="flex-1 border-white/10" />
-        <span className="px-2 text-xs text-gray-400">OR</span>
-        <hr className="flex-1 border-white/10" />
-      </div>
-
-      {/* Social */}
-      <button className="w-full bg-[#1e293b] py-2 rounded-full mb-2 text-sm hover:bg-[#334155] transition">
-        Continue with Google
-      </button>
-
-      <button className="w-full bg-[#1e293b] py-2 rounded-full text-sm hover:bg-[#334155] transition">
-        Continue with Apple
-      </button>
-
-      {/* Signup */}
-      <p className="text-sm text-center mt-4 text-gray-400">
-        Don’t have an account?{" "}
-        <span
-          onClick={onSwitch}
-          className="text-blue-400 cursor-pointer hover:underline"
+        {/* CLOSE */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white"
         >
-          SignUp
-        </span>
-      </p>
+          <X size={18} />
+        </button>
 
+        <h2 className="text-white text-xl font-semibold mb-1">
+          Login Account
+        </h2>
+        <p className="text-gray-400 text-sm mb-5">
+          Login to continue your account
+        </p>
+
+        {/* EMAIL */}
+        <div className="flex items-center bg-white/10 px-3 py-2 rounded-lg mb-3 border border-white/10">
+          <Mail size={16} className="text-gray-400" />
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-transparent ml-2 outline-none text-white w-full"
+          />
+        </div>
+
+        {/* PASSWORD */}
+        <div className="flex items-center bg-white/10 px-3 py-2 rounded-lg mb-2 border border-white/10">
+          <Lock size={16} className="text-gray-400" />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="bg-transparent ml-2 outline-none text-white w-full"
+          />
+        </div>
+
+        <div className="text-right text-xs text-gray-400 mb-4 hover:text-white cursor-pointer">
+          Forget Password?
+        </div>
+
+        {/* LOGIN BUTTON */}
+        <button
+          onClick={handleLogin}
+          className="w-full py-2 rounded-lg bg-gradient-to-r from-cyan-400 to-purple-400 text-white font-medium mb-4"
+        >
+          Login Account
+        </button>
+
+        {/* DIVIDER */}
+        <div className="flex items-center gap-2 text-gray-400 text-sm mb-4">
+          <div className="flex-1 h-[1px] bg-white/10"></div>
+          OR
+          <div className="flex-1 h-[1px] bg-white/10"></div>
+        </div>
+
+        <button className="w-full py-2 rounded-lg bg-white/10 text-white mb-2 hover:bg-white/20">
+          Continue with Google
+        </button>
+
+        <button className="w-full py-2 rounded-lg bg-white/10 text-white hover:bg-white/20">
+          Continue with Apple
+        </button>
+
+        {/* ✅ FIXED SIGNUP NAVIGATION */}
+        <p className="text-gray-400 text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <span
+            onClick={() =>
+              navigate("/signup", { state: { background } }) // ✅ FIX HERE
+            }
+            className="text-cyan-400 cursor-pointer"
+          >
+            SignUp
+          </span>
+        </p>
+
+      </div>
     </div>
   );
 };
